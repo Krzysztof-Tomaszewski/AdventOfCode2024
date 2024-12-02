@@ -23,3 +23,22 @@ fun getTwoIntListsFromFile(filePath: String): Pair<List<Int>, List<Int>> {
     }
     return Pair(list1, list2)
 }
+
+fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    val list = mutableListOf<List<Int>>()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            val parts = line.trim().split("\\s+".toRegex())
+            if (parts.isNotEmpty()) {
+                val intList = parts.map { e -> e.toInt() }
+                list.add(intList)
+            }
+        }
+    }
+    return list
+}
