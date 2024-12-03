@@ -42,3 +42,18 @@ fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
     }
     return list
 }
+
+fun getStringListFromFile(filePath: String): List<String> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    val list = mutableListOf<String>()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            list.add(line)
+        }
+    }
+    return list
+}
