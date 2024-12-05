@@ -24,23 +24,32 @@ fun getTwoIntListsFromFile(filePath: String): Pair<List<Int>, List<Int>> {
     return Pair(list1, list2)
 }
 
-fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
+fun getIntPairsAndIntListsFromFile(filePath: String): Pair<List<Pair<Int,Int>>,List<List<Int>>> {
     val inputStream = {}.javaClass.getResourceAsStream(filePath)
         ?: throw IllegalArgumentException("File not found in resources")
 
-    val list = mutableListOf<List<Int>>()
+    val intsList = mutableListOf<List<Int>>()
+    val intPairs = mutableListOf<Pair<Int,Int>>()
+
+    var firstPart = true
 
     // Read and parse the file
     inputStream.bufferedReader().useLines { lines ->
         lines.forEach { line ->
-            val parts = line.trim().split("\\s+".toRegex())
-            if (parts.isNotEmpty()) {
-                val intList = parts.map { e -> e.toInt() }
-                list.add(intList)
+            if (line.trim().isEmpty()) {
+                firstPart = false
+            } else {
+                if(firstPart) {
+                    val split = line.split("|")
+                    intPairs.add(split[0].toInt() to split[1].toInt())
+                } else {
+                    val split = line.split(",")
+                    intsList.add(split.map { s -> s.toInt() })
+                }
             }
         }
     }
-    return list
+    return intPairs to intsList
 }
 
 fun getStringListFromFile(filePath: String): List<String> {
@@ -68,6 +77,25 @@ fun getListOfCharListsFromFile(filePath: String): List<List<Char>> {
     inputStream.bufferedReader().useLines { lines ->
         lines.forEach { line ->
             list.add(line.toList())
+        }
+    }
+    return list
+}
+
+fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    val list = mutableListOf<List<Int>>()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            val parts = line.trim().split("\\s+".toRegex())
+            if (parts.isNotEmpty()) {
+                val intList = parts.map { e -> e.toInt() }
+                list.add(intList)
+            }
         }
     }
     return list
