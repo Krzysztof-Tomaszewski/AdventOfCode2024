@@ -67,16 +67,16 @@ fun getStringListFromFile(filePath: String): List<String> {
     return list
 }
 
-fun getListOfCharListsFromFile(filePath: String): List<List<Char>> {
+fun getListOfCharListsFromFile(filePath: String): MutableList<MutableList<Char>> {
     val inputStream = {}.javaClass.getResourceAsStream(filePath)
         ?: throw IllegalArgumentException("File not found in resources")
 
-    val list = mutableListOf<List<Char>>()
+    val list = mutableListOf<MutableList<Char>>()
 
     // Read and parse the file
     inputStream.bufferedReader().useLines { lines ->
         lines.forEach { line ->
-            list.add(line.toList())
+            list.add(line.toMutableList())
         }
     }
     return list
