@@ -100,3 +100,19 @@ fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
     }
     return list
 }
+
+fun getIntAndListOfIntsPairsFromFile(filePath: String): List<Pair<Long,List<Long>>> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    val list = mutableListOf<Pair<Long,List<Long>>>()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            val split = line.split(": ")
+            list.add(split[0].toLong() to (split[1].split(" ").toList().map { i -> i.toLong() }))
+        }
+    }
+    return list
+}
