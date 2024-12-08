@@ -76,7 +76,7 @@ fun getListOfCharListsFromFile(filePath: String): MutableList<MutableList<Char>>
     // Read and parse the file
     inputStream.bufferedReader().useLines { lines ->
         lines.forEach { line ->
-            list.add(line.toMutableList())
+            list.add(line.trim().toMutableList())
         }
     }
     return list
