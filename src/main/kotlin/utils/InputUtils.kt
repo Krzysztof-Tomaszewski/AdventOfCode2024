@@ -116,3 +116,18 @@ fun getIntAndListOfIntsPairsFromFile(filePath: String): List<Pair<Long,List<Long
     }
     return list
 }
+
+fun getStringFromFile(filePath: String): String {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    var result = ""
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            result += (line.trim())
+        }
+    }
+    return result
+}
