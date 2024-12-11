@@ -24,12 +24,12 @@ fun getTwoIntListsFromFile(filePath: String): Pair<List<Int>, List<Int>> {
     return Pair(list1, list2)
 }
 
-fun getIntPairsAndIntListsFromFile(filePath: String): Pair<List<Pair<Int,Int>>,List<List<Int>>> {
+fun getIntPairsAndIntListsFromFile(filePath: String): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
     val inputStream = {}.javaClass.getResourceAsStream(filePath)
         ?: throw IllegalArgumentException("File not found in resources")
 
     val intsList = mutableListOf<List<Int>>()
-    val intPairs = mutableListOf<Pair<Int,Int>>()
+    val intPairs = mutableListOf<Pair<Int, Int>>()
 
     var firstPart = true
 
@@ -39,7 +39,7 @@ fun getIntPairsAndIntListsFromFile(filePath: String): Pair<List<Pair<Int,Int>>,L
             if (line.trim().isEmpty()) {
                 firstPart = false
             } else {
-                if(firstPart) {
+                if (firstPart) {
                     val split = line.split("|")
                     intPairs.add(split[0].toInt() to split[1].toInt())
                 } else {
@@ -101,11 +101,11 @@ fun getListOfIntListsFromFile(filePath: String): List<List<Int>> {
     return list
 }
 
-fun getIntAndListOfIntsPairsFromFile(filePath: String): List<Pair<Long,List<Long>>> {
+fun getIntAndListOfIntsPairsFromFile(filePath: String): List<Pair<Long, List<Long>>> {
     val inputStream = {}.javaClass.getResourceAsStream(filePath)
         ?: throw IllegalArgumentException("File not found in resources")
 
-    val list = mutableListOf<Pair<Long,List<Long>>>()
+    val list = mutableListOf<Pair<Long, List<Long>>>()
 
     // Read and parse the file
     inputStream.bufferedReader().useLines { lines ->
@@ -127,6 +127,23 @@ fun getStringFromFile(filePath: String): String {
     inputStream.bufferedReader().useLines { lines ->
         lines.forEach { line ->
             result += (line.trim())
+        }
+    }
+    return result
+}
+
+fun getLongListFromFile(filePath: String): List<Long> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    var result: MutableList<Long> = mutableListOf()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            if (line.trim().isNotEmpty()) {
+                line.trim().split(" ").forEach { str -> result.add(str.toLong()) }
+            }
         }
     }
     return result
