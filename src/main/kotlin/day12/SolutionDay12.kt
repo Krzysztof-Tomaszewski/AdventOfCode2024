@@ -52,13 +52,11 @@ fun calculatePriceOfFencingAllRegionsWithDiscount(gardenMap: MutableList<Mutable
             for (direction in directions) {
                 val neighbour = plant + direction
                 val edge = plant to neighbour
-                val reverseEdge = neighbour to plant
                 if (neighbour.first !in gardenMap.indices || neighbour.second !in gardenMap[0].indices || gardenMap[neighbour] != plantType) {
-                    if(!wallWasCountedAlready(edge, direction) && !wallWasCountedAlready(reverseEdge, direction)) {
+                    if(!wallWasCountedAlready(edge, direction)) {
                         walls++
                     }
                     countedWalls.add(edge)
-                    countedWalls.add(reverseEdge)
                 } else if (neighbour !in visited) {
                     queue.add(neighbour)
                 }

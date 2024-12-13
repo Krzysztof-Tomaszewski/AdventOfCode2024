@@ -16,19 +16,21 @@ class SolutionDay12KtTest {
     }
 
     @Test
-    fun partTwoSimpleCase() {
+    fun partTwoSimpleCase1() {
         val map = mutableListOf(
-            "AAAA".toMutableList(),
-            "AABB".toMutableList()
+            "AABB".toMutableList(),
+            "AABB".toMutableList(),
+            "CCDD".toMutableList(),
+            "CCDD".toMutableList()
         )
 
         val result = calculatePriceOfFencingAllRegionsWithDiscount(map)
 
-        assertEquals(44, result)
+        assertEquals(64, result)
     }
 
     @Test
-    fun partTwoSimpleCas2e() {
+    fun partTwoSimpleCas2() {
         val map = mutableListOf(
             "AAAA".toMutableList(),
             "BBCD".toMutableList(),
@@ -90,5 +92,19 @@ class SolutionDay12KtTest {
         val result = calculatePriceOfFencingAllRegionsWithDiscount(map)
 
         assertEquals(1206, result)
+    }
+
+    @Test
+    fun partTwoSimpleCas6() {
+        val map = mutableListOf(
+            "CCAAA".toMutableList(),
+            "CCAAA".toMutableList(),
+            "AABBA".toMutableList(),
+            "AAAAA".toMutableList()
+        )
+
+        val result = calculatePriceOfFencingAllRegionsWithDiscount(map)
+
+        assertEquals(164, result)
     }
 }
