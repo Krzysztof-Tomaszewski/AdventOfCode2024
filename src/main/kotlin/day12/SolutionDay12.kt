@@ -16,7 +16,7 @@ fun main() {
     val result1 = calculatePriceOfFencingAllRegions(gardenMap)
     val result2 = calculatePriceOfFencingAllRegionsWithDiscount(gardenMap)
     println("Part 1 result: $result1")//Part 1 result: 1437300
-    println("Part 2 result: $result2")//Part 2 result:
+    println("Part 2 result: $result2")//Part 2 result: 849332
 }
 
 fun calculatePriceOfFencingAllRegionsWithDiscount(gardenMap: MutableList<MutableList<Char>>): Long {
