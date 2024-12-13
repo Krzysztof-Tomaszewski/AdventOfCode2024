@@ -33,13 +33,13 @@ fun calculatePriceOfFencingAllRegionsWithDiscount(gardenMap: MutableList<Mutable
 
         val directions = listOf(Pair(-1, 0), Pair(1, 0), Pair(0, -1), Pair(0, 1))
 
-        fun wallWasCountedAlready(edge : Pair<Pair<Int, Int>, Pair<Int, Int>>, direction : Pair<Int, Int>): Boolean {
+        fun wallWasCountedAlready(edge: Pair<Pair<Int, Int>, Pair<Int, Int>>, direction: Pair<Int, Int>): Boolean {
             val (x1, y1) = edge.first
             val (x2, y2) = edge.second
             return if (direction == 1 to 0 || direction == -1 to 0) {
-                countedWalls.contains((x1 to y1-1) to (x2 to y2-1)) || countedWalls.contains((x1 to y1+1) to (x2 to y2+1))
+                countedWalls.contains((x1 to y1 - 1) to (x2 to y2 - 1)) || countedWalls.contains((x1 to y1 + 1) to (x2 to y2 + 1))
             } else {
-                countedWalls.contains((x1-1 to y1) to (x2-1 to y2)) || countedWalls.contains((x1+1 to y1) to (x2+1 to y2))
+                countedWalls.contains((x1 - 1 to y1) to (x2 - 1 to y2)) || countedWalls.contains((x1 + 1 to y1) to (x2 + 1 to y2))
             }
         }
 
@@ -53,7 +53,7 @@ fun calculatePriceOfFencingAllRegionsWithDiscount(gardenMap: MutableList<Mutable
                 val neighbour = plant + direction
                 val edge = plant to neighbour
                 if (neighbour.first !in gardenMap.indices || neighbour.second !in gardenMap[0].indices || gardenMap[neighbour] != plantType) {
-                    if(!wallWasCountedAlready(edge, direction)) {
+                    if (!wallWasCountedAlready(edge, direction)) {
                         walls++
                     }
                     countedWalls.add(edge)
