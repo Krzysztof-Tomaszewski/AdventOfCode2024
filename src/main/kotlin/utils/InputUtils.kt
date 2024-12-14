@@ -58,6 +58,28 @@ fun getListOfTripleIntPairs(filePath: String): List<Triple<Pair<Int,Int>, Pair<I
     return resultList
 }
 
+fun getListOfPairIntPairs(filePath: String): List<Pair<Pair<Int,Int>, Pair<Int,Int>>> {
+    val inputStream = {}.javaClass.getResourceAsStream(filePath)
+        ?: throw IllegalArgumentException("File not found in resources")
+
+    val resultList = mutableListOf<Pair<Pair<Int,Int>, Pair<Int,Int>>>()
+
+    val regex = "-?\\d+".toRegex()
+
+    // Read and parse the file
+    inputStream.bufferedReader().useLines { lines ->
+        lines.forEach { line ->
+            val numbers = regex.findAll(line).map { it.value.toInt() }.toList()
+            if (numbers.size == 4) {
+                val pair1 = numbers[0] to numbers[1]
+                val pair2 = numbers[2] to numbers[3]
+                resultList.add(pair1 to pair2)
+            }
+        }
+    }
+    return resultList
+}
+
 fun getIntPairsAndIntListsFromFile(filePath: String): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
     val inputStream = {}.javaClass.getResourceAsStream(filePath)
         ?: throw IllegalArgumentException("File not found in resources")
