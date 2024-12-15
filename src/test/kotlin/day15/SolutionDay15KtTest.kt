@@ -64,10 +64,20 @@ class SolutionDay15KtTest {
             "##..@.##".toMutableList(),
             "########".toMutableList(),
         )
+
+        val shouldBe = mutableListOf(
+            "########".toMutableList(),
+            "##....##".toMutableList(),
+            "##.[]###".toMutableList(),
+            "####[]##".toMutableList(),
+            "##....##".toMutableList(),
+            "########".toMutableList(),
+        )
         val route = "^^"
 
         val result = robotRoute(map, route)
-        result.forEach { it -> println(it) }
+
+        assertEquals(shouldBe, result)
     }
 }
 

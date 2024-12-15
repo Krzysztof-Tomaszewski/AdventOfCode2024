@@ -60,63 +60,77 @@ fun robotRoute(originalMatrix: MutableList<MutableList<Char>>, route: String): M
                     }
 
                     matrix[nextPosition] == 'O' -> {
-                        if (tryToPush(matrix, nextPosition, currentDirection)) {
-                            push(matrix, nextPosition, currentDirection)
-                            currentPosition += currentDirection.coords
-                        }
+                        currentPosition = handleLinearMove(matrix, nextPosition, currentDirection, currentPosition)
                     }
 
                     matrix[nextPosition] == '[' -> {
-                        if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
-                            if (canBePushed(matrix, nextPosition, currentDirection) && canBePushed(
-                                    matrix,
-                                    nextPosition + (0 to 1),
-                                    currentDirection
-                                ) && tryToPush(matrix, nextPosition, currentDirection) && tryToPush(
-                                    matrix,
-                                    nextPosition + (0 to 1),
-                                    currentDirection
-                                )
-                            ) {
-                                push(matrix, nextPosition, currentDirection)
-                                push(matrix, nextPosition+ (0 to 1), currentDirection)
-                                currentPosition += currentDirection.coords
-                            }
+                        currentPosition = if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
+                            handleTwoPosMove(
+                                matrix,
+                                nextPosition,
+                                currentDirection,
+                                currentPosition,
+                                Direction.RIGHT.coords
+                            )
                         } else {
-                            if (tryToPush(matrix, nextPosition, currentDirection)) {
-                                push(matrix, nextPosition, currentDirection)
-                                currentPosition += currentDirection.coords
-                            }
+                            handleLinearMove(matrix, nextPosition, currentDirection, currentPosition)
                         }
                     }
 
                     matrix[nextPosition] == ']' -> {
-                        if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
-                            if (canBePushed(matrix, nextPosition, currentDirection) && canBePushed(
-                                    matrix,
-                                    nextPosition + (0 to -1),
-                                    currentDirection
-                                ) && tryToPush(matrix, nextPosition, currentDirection) && tryToPush(
-                                    matrix,
-                                    nextPosition + (0 to -1),
-                                    currentDirection
-                                )
-                            ) {
-                                push(matrix, nextPosition, currentDirection)
-                                push(matrix, nextPosition+ (0 to -1), currentDirection)
-                                currentPosition += currentDirection.coords
-                            }
+                        currentPosition = if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
+                            handleTwoPosMove(
+                                matrix,
+                                nextPosition,
+                                currentDirection,
+                                currentPosition,
+                                Direction.LEFT.coords
+                            )
                         } else {
-                            if (tryToPush(matrix, nextPosition, currentDirection)) {
-                                push(matrix, nextPosition, currentDirection)
-                                currentPosition += currentDirection.coords
-                            }
+                            handleLinearMove(matrix, nextPosition, currentDirection, currentPosition)
                         }
                     }
                 }
             }
         }
     return matrix
+}
+
+private fun handleLinearMove(
+    matrix: MutableList<MutableList<Char>>,
+    nextPosition: Pair<Int, Int>,
+    currentDirection: Direction,
+    currentPosition: Pair<Int, Int>
+): Pair<Int, Int> {
+    if (tryToPush(matrix, nextPosition, currentDirection)) {
+        push(matrix, nextPosition, currentDirection)
+        return currentPosition + currentDirection.coords
+    }
+    return currentPosition
+}
+
+private fun handleTwoPosMove(
+    matrix: MutableList<MutableList<Char>>,
+    nextPosition: Pair<Int, Int>,
+    currentDirection: Direction,
+    currentPosition: Pair<Int, Int>,
+    secondPosOffset: Pair<Int, Int>
+): Pair<Int, Int> {
+    if (canBePushed(matrix, nextPosition, currentDirection) && canBePushed(
+            matrix,
+            nextPosition + secondPosOffset,
+            currentDirection
+        ) && tryToPush(matrix, nextPosition, currentDirection) && tryToPush(
+            matrix,
+            nextPosition + secondPosOffset,
+            currentDirection
+        )
+    ) {
+        push(matrix, nextPosition, currentDirection)
+        push(matrix, nextPosition + secondPosOffset, currentDirection)
+        return currentPosition + currentDirection.coords
+    }
+    return currentPosition
 }
 
 private fun push(
@@ -145,7 +159,11 @@ fun canBePushed(
 
         matrix[nextPosition] == '[' -> {
             if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
-                canBePushed(matrix, nextPosition, currentDirection) && canBePushed(matrix, nextPosition + (0 to 1), currentDirection)
+                canBePushed(matrix, nextPosition, currentDirection) && canBePushed(
+                    matrix,
+                    nextPosition + Direction.RIGHT.coords,
+                    currentDirection
+                )
             } else {
                 canBePushed(matrix, nextPosition, currentDirection)
             }
@@ -154,7 +172,7 @@ fun canBePushed(
         matrix[nextPosition] == ']' -> {
             if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
                 canBePushed(matrix, nextPosition, currentDirection)
-                        && canBePushed(matrix, nextPosition + (0 to -1), currentDirection)
+                        && canBePushed(matrix, nextPosition + Direction.LEFT.coords, currentDirection)
             } else {
                 canBePushed(matrix, nextPosition, currentDirection)
             }
@@ -176,22 +194,22 @@ fun tryToPush(
         }
 
         matrix[nextPosition] == 'O' -> {
-            handleHorizontalPush(matrix, nextPosition, currentDirection)
+            handleLinearPush(matrix, nextPosition, currentDirection)
         }
 
         matrix[nextPosition] == '[' -> {
             if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
-                handleVerticalPush(matrix, nextPosition, currentDirection, 0 to 1)
+                handleTwoPosPush(matrix, nextPosition, currentDirection, Direction.RIGHT.coords)
             } else {
-                handleHorizontalPush(matrix, nextPosition, currentDirection)
+                handleLinearPush(matrix, nextPosition, currentDirection)
             }
         }
 
         matrix[nextPosition] == ']' -> {
             if (currentDirection == Direction.UP || currentDirection == Direction.DOWN) {
-                handleVerticalPush(matrix, nextPosition, currentDirection, 0 to -1)
+                handleTwoPosPush(matrix, nextPosition, currentDirection, Direction.LEFT.coords)
             } else {
-                handleHorizontalPush(matrix, nextPosition, currentDirection)
+                handleLinearPush(matrix, nextPosition, currentDirection)
             }
         }
 
@@ -199,7 +217,7 @@ fun tryToPush(
     }
 }
 
-private fun handleVerticalPush(
+private fun handleTwoPosPush(
     matrix: MutableList<MutableList<Char>>,
     nextPosition: Pair<Int, Int>,
     currentDirection: Direction, secondPosOffset: Pair<Int, Int>
@@ -216,7 +234,7 @@ private fun handleVerticalPush(
     false
 }
 
-private fun handleHorizontalPush(
+private fun handleLinearPush(
     matrix: MutableList<MutableList<Char>>,
     nextPosition: Pair<Int, Int>,
     currentDirection: Direction
@@ -225,17 +243,6 @@ private fun handleHorizontalPush(
     true
 } else {
     false
-}
-
-
-fun main() {
-    val matrix = getListOfCharListsFromFile("/day15/input1.txt")
-    val route = getStringFromFile("/day15/input2.txt")
-    val widerMap = getWiderMap(matrix)
-    val result1 = calculateSumOfBoxesGPSCoords(matrix, route)
-    val result2 = calculateSumOfBoxesGPSCoords(widerMap, route)
-    println("Part 1 result: $result1")//Part 1 result: 1526018
-    println("Part 2 result: $result2")//Part 2 result: 1550677
 }
 
 fun getWiderMap(originalMap: MutableList<MutableList<Char>>): MutableList<MutableList<Char>> {
@@ -283,3 +290,12 @@ fun calculateSumOfBoxesGPSCoords(matrix: MutableList<MutableList<Char>>, route: 
     return sum
 }
 
+fun main() {
+    val matrix = getListOfCharListsFromFile("/day15/input1.txt")
+    val route = getStringFromFile("/day15/input2.txt")
+    val widerMap = getWiderMap(matrix)
+    val result1 = calculateSumOfBoxesGPSCoords(matrix, route)
+    val result2 = calculateSumOfBoxesGPSCoords(widerMap, route)
+    println("Part 1 result: $result1")//Part 1 result: 1526018
+    println("Part 2 result: $result2")//Part 2 result: 1550677
+}
